@@ -10,12 +10,12 @@ const NAME = "Overmint3";
 
 describe(NAME, function () {
   async function setup() {
-    const [owner, attackerWallet] = await ethers.getSigners();
+    const [owner, attackerWallet, ...extras] = await ethers.getSigners();
 
     const VictimFactory = await ethers.getContractFactory(NAME);
     const victimContract = await VictimFactory.deploy();
 
-    return { victimContract, attackerWallet };
+    return { victimContract, attackerWallet, extras };
   }
 
   describe("exploit", async function () {
@@ -25,25 +25,23 @@ describe(NAME, function () {
     });
 
     it("conduct your attack here", async function () {
-      for (let i = 0; i < 5; i++) {
-        await victimContract.mint({ from: attackerWallet.address });
-        amountMinted[attackerWallet.address] =
-          amountMinted[attackerWallet.address].add(1);
-      }
-      const balance = ethers.utils.bigNumberify(
-        await victimContract.balanceOf(attackerWallet.address)
+      const BatchNFTMinterFactory = await ethers.getContractFactory(
+        "BatchNFTMinter",
+        attackerWallet
       );
-      expect(balance).to.be.equal(5);
-      expect(amountMinted[attackerWallet.address]).to.be.equal(5);
+      await BatchNFTMinterFactory.deploy(
+        victimContract.address,
+        attackerWallet.address
+      );
     });
 
     after(async function () {
       expect(
         await victimContract.balanceOf(attackerWallet.address)
-      ).to.be.equal(5);
+      ).to.be.equal(5); // Check if the attacker has 5 NFTs
       expect(
         await ethers.provider.getTransactionCount(attackerWallet.address)
-      ).to.equal(1, "must exploit one transaction");
+      ).to.equal(1, "must exploit one transaction"); // Verify that the exploit was done in one transaction
     });
   });
 });
