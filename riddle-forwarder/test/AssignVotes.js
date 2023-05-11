@@ -28,7 +28,7 @@ describe(NAME, function () {
     it("conduct your attack here", async function () {
       // Deploy the Attacker contract
       const AttackerFactory = await ethers.getContractFactory(
-        "MaliciousContract"
+        "MaliciousAssignVotesContract"
       );
       const attackerContract = await AttackerFactory.deploy(
         victimContract.address

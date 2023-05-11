@@ -3,7 +3,7 @@ pragma solidity 0.8.15;
 
 import "./AssignVotes.sol";
 
-contract MaliciousContract {
+contract MaliciousAssignVotesContract {
     AssignVotes immutable victim;
 
     constructor(address _victimAdd) {
