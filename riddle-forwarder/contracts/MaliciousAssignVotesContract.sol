@@ -35,7 +35,6 @@ contract MaliciousAssignVotesContract {
 
 // Contract to create voters for a proposal
 contract ProposalVoterCreator {
-    // Create an immutable reference to the victim contract
     AssignVotes immutable victim;
 
     constructor(address _victimAdd, uint256 _proposalNumber) {
