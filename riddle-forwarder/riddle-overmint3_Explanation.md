@@ -1,5 +1,7 @@
 # Title: Overminting NFTs in One Transaction: Exploit and Countermeasures
 
+# Goal: Get a balance of 5 NFTs instead of 1
+
 # Description:
 
 The Overmint3 smart contract has a vulnerability that enables an attacker to obtain multiple NFTs within a single transaction, bypassing the intended limit of one NFT per user. This issue stems from insufficient checks during the minting process.
